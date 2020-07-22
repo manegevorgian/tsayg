@@ -19,9 +19,9 @@ header('');
 
  $file = file_get_contents(ABSPATH.'wp-content\themes\Soledad v7.3.2\soledad-child\rates.xml');
  $decoded = new SimpleXMLElement($file);
-var_dump($decoded); exit;
+//var_dump($decoded); exit;
  foreach($decoded->xpath("Body") as $oEntry){
-     echo $oEntry->title . "\n";
+    // echo $oEntry->title . "\n";
  }
  // Further processing ...
 // echo var_dump ($server_output);
