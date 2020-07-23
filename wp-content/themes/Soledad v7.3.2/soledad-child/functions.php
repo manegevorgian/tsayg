@@ -14,4 +14,9 @@ add_action( 'wp_enqueue_scripts', 'penci_soledad_child_scripts' );
  * All custom functions go here
  */
 
-require_once "rates.php";
+
+function wpb_demo_shortcode() {
+    require_once "rates.php";
+}
+// register shortcode
+add_shortcode('rates', 'wpb_demo_shortcode');
