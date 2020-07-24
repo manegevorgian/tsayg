@@ -14,9 +14,16 @@ add_action( 'wp_enqueue_scripts', 'penci_soledad_child_scripts' );
  * All custom functions go here
  */
 
-
+//using rates widget as a shortcode
 function wpb_demo_shortcode() {
     require_once "rates.php";
 }
 // register shortcode
 add_shortcode('rates', 'wpb_demo_shortcode');
+
+//redirect to homepage after loging out
+add_action('wp_logout','ps_redirect_after_logout');
+function ps_redirect_after_logout(){
+    wp_redirect( '/' );
+    exit();
+}

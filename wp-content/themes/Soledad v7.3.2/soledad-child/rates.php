@@ -67,8 +67,12 @@
      echo "cURL Error #:" . $err;
  }
 $temp=substr($response,152,2);
+ //echo $response;
+
+
+
  ?>
-<div style="display: flex;flex-direction: column; align-items: center; width: max-content">
+<div style="display: flex;flex-direction: column;margin-left: 40px; align-items: center; width: max-content">
      <div style="display: flex;flex-direction: row; width: max-content">
          <?php foreach ($ratesArray as $key => $rate) { ?>
             <div style="display: flex; margin:5px; font-weight: bold;">
@@ -79,7 +83,7 @@ $temp=substr($response,152,2);
      </div>
      <div style="display: flex;flex-direction: row; width: max-content">
             <div id="time" style="display: flex;font-weight: bold;margin: 5px"></div>
-            <div style="display: flex;font-weight: bold;margin: 5px"><?=$temp."°C"?></div>
+<!--            <div style="display: flex;font-weight: bold;margin: 5px">--><?//=//$temp."°C"?><!--</div>-->
      </div>
 </div>
  <script>
