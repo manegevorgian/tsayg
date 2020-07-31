@@ -1,4 +1,3 @@
-
 <html>
 <head>
 
@@ -29,15 +28,23 @@
 </style>
 
 <?php
-$content=$_POST('tinker_input');
-$query1 =new wpdb('root','','tsayg','localhost');
-//$content = $query1->get_results( 'SELECT * FROM `tinker`' ,ARRAY_A );
-//wpdb::insert('tinker', array('content'=>$_POST('tinker_input')));
-if($_POST('tinker_input')!=null){
-    $query1->insert(
-        'tinker',
-        array('content' => $content)
+//insert input
+if( isset($_POST['tinker_input']) ) {
 
+   $content=$_POST['tinker_input'];
+    //deal with database in WordPress way
+    $query1 =new wpdb('root','','tsayg','localhost');
+    $tinker_table = $query1->prefix."tinker";
+    $query1->insert(
+        $tinker_table,
+        array(
+            'content'=>$content
+        ),
+        array(
+            '%s'
+        )
     );
 }
+
+
 ?>

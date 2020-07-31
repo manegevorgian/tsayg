@@ -1,17 +1,25 @@
 <?php
+
+$query1 = new wpdb('root', '', 'tsayg', 'localhost');
+$tinker = $query1->get_results('SELECT `content` FROM `tinker` ORDER BY `id` DESC ', ARRAY_A);
+$content= $tinker[0]['content'];
 ?>
 <style>
     .tcontainer {
         width: 100%;
         overflow: hidden; /* Hide scroll bar */
+
     }
 
     /* MIDDLE CONTAINER */
     .ticker-wrap {
         width: 100%;
+        height: 4%;
+        padding-top: 2px;
         padding-left: 100%; /* Push contents to right side of screen */
         background-color: #dd0000;
         color: #fff0ef;
+        font-weight: bold;
     }
 
     /* INNER CONTAINER */
@@ -42,7 +50,7 @@
 <div class="tcontainer">
     <div class="ticker-wrap">
         <div class="ticker-move">
-            <div class="ticker-item"><?php echo ''; ?></div>
+            <div class="ticker-item"><?php echo $content; ?></div>
         </div>
     </div>
 </div>
