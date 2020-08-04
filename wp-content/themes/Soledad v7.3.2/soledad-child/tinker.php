@@ -47,6 +47,8 @@ $content= $tinker[0]['content'];
         padding: 0 2rem;
     }
 </style>
+
+
 <div class="tcontainer">
     <div class="ticker-wrap">
         <div class="ticker-move">

@@ -19,3 +19,18 @@ function pollPluginCallback()
     <script>alert('plugin activated')</script>
 <?php
 }
+
+function tco_poll_menu_page() {
+    add_menu_page(
+        'TCO Poll',
+        'TCO Poll',
+        'manage_options',
+        'tco-poll',
+        'tco_poll_menu_callback'
+    );
+    function tco_poll_menu_callback(){
+        require_once 'poll_options.php';
+    }
+
+}
+add_action( 'admin_menu', 'tco_poll_menu_page' );

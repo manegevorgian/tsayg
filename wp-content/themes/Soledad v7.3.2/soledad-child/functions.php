@@ -45,8 +45,19 @@ function wpdocs_tinker_menu_page() {
 add_action( 'admin_menu', 'wpdocs_tinker_menu_page' );
 
 
-require_once "tinker.php";
+//require_once "tinker.php";
+//using tinker widget as a shortcode
+function wpb_tinker_shortcode() {
+    require_once "tinker.php";
+}
+ //register shortcode
+add_shortcode('tinker', 'wpb_tinker_shortcode');
 
+?>
+    <div class="right-header-wrap">
+        <?php echo do_shortcode( '[tinker]' ); ?>
+    </div>
+<?php
 
 
 //redirect to homepage after logout
