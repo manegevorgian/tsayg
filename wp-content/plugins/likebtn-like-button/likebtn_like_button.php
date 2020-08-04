@@ -3,7 +3,7 @@
   Plugin Name: Like Button Rating ♥ LikeBtn
   Plugin URI: https://likebtn.com/en/wordpress-like-button-plugin
   Description: Add Like button to posts, pages, comments, WooCommerce, BuddyPress, bbPress, custom post types! Sort content by likes! Get instant stats and insights!
-  Version: 2.6.27
+  Version: 2.6.28
   Text Domain: likebtn-like-button
   Author: LikeBtn
   Author URI: https://likebtn.com
@@ -14,7 +14,7 @@
 // ini_set('error_reporting', E_ALL);
 
 // Plugin version
-define('LIKEBTN_VERSION', '2.6.27');
+define('LIKEBTN_VERSION', '2.6.28');
 // Current DB version
 define('LIKEBTN_DB_VERSION', 20);
 
@@ -2981,6 +2981,10 @@ function likebtn_admin_statistics() {
                         $url_votes = admin_url('admin.php').'?page=likebtn_votes&likebtn_entity_name='.$entity_name.'&likebtn_post_id='.$statistics_item->post_id.'&show=View';
 
                         $image = _likebtn_get_entity_image($entity_name, $statistics_item->post_id, array(32,32));
+
+                        if ($statistics_item->post_title === '') {
+                            $statistics_item->post_title = $statistics_item->post_id;
+                        }
                     ?>
 
                     <tr id="item_<?php echo $statistics_item->post_id; ?>">
