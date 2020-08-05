@@ -1,32 +1,49 @@
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-<!-- jQuery library -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <form method="post" action="">
-        <div class="form-group container" style="display: flex;color: #4cae4c; flex-direction: column; width:30%">
+        <div class="container" id="container" style="display: flex;color: #4cae4c; flex-direction: column; width:30%">
             <h3 class="text-center" style="color: #4cae4c; font-weight: bolder" >TCO Poll</h3>
-            <label for="question">Set the Question</label>
-            <input name="question" type="text" id="question" placeholder="Question">
-            <label for="1">Answer 1</label>
-            <input name="ans1" type="text" id="1" placeholder="1">
-            <label for="2">Answer 2</label>
-            <input name="ans2" type="text" id="2"  placeholder="2">
-            <label for="3">Answer 3</label>
-            <input name="ans3" type="text"  id="3" placeholder="3">
-            <label for="4">Answer 4</label>
-            <input name="ans4" type="text"  id="4" placeholder="4">
-            <label for="5">Answer 5</label>
-            <input name="ans5" type="text" id="5"  placeholder="5">
-            <label for="6">Answer 6</label>
-            <input name="ans6" type="text"  id="6" placeholder="6" class="success">
-            <input type="submit" class="btn btn-success btn-group-lg">Submit</input>
+            <div id="form-inputs">
+                <div class="form-group">
+                    <label for="question">Set the Question</label>
+                    <input name="question" type="text" id="question" class="form-control" placeholder="Question">
+                </div>
+                <div class="form-group" id="answer-div">
+                    <label for="answer">Answer</label>
+                    <input  type="text" id="answer" class="form-control" placeholder="Enter the Answer">
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" id="addAnswer" class="btn btn-secondary btn-group-lg">+Add new</button>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success btn-group-lg">
+            </div>
         </div>
     </form>
+
+<script type='text/javascript'>
+    let i = 0
+    window.addEventListener('load',function () {
+        let container = $("#form-inputs");
+        let addAnswer = $('#addAnswer');
+        addAnswer.on('click', function () {
+            container.append(`<div class="form-group" id="answer-div"><label for="answer">Answer</label><input type='text' name=${i++} class='form-control' placeholder='Enter the Answer'></div>`);
+        });
+        let answers = document.querySelectorAll(".form-control");
+        console.log(answers);
+        // for(let i=1;i<=answers.length;i++){
+        // $( "#answer" ).attr({
+        //    name: i
+        // });
+        // }
+    });
+
+</script>
 
 
 <style>
@@ -46,23 +63,28 @@ function checking($x){
 if(checking($_POST['question'])){
     $question=$_POST['question'];
 }
-if(checking($_POST['ans1'])){
-    array_push($answers,$_POST['ans1']);
+$name=0;
+while(checking($_POST["{$name}"])){
+    array_push($answers,$_POST["{$name}"]);
+    $name++;
 }
-if(checking($_POST['ans2'])){
-    array_push($answers,$_POST['ans2']);
-}
-if(checking($_POST['ans3'])){
-    array_push($answers,$_POST['ans3']);
-}
-if(checking($_POST['ans4'])){
-    array_push($answers,$_POST['ans4']);
-}
-if(checking($_POST['ans5'])){
-    array_push($answers,$_POST['ans5']);
-}
-if(checking($_POST['ans6'])){
-    array_push($answers,$_POST['ans6']);
-}
+$answers_str=implode("/" ,$answers);
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-var_dump($answers);
+$tableName = "wp_tco_poll";
+$dbPrefix = DB_NAME;
+$sql = "CREATE TABLE `$dbPrefix`.`$tableName` ( `id` INT NOT NULL AUTO_INCREMENT , `question` TEXT NOT NULL , `answers` TEXT NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB";
+$a = maybe_create_table($tableName, $sql);
+var_dump($a);
+
+$wpdb->insert(
+    $tableName,
+    array(
+        'question'=>$question,
+        'answers'=>$answers_str
+    ),
+    array(
+        '%s',
+        '%s'
+    )
+);

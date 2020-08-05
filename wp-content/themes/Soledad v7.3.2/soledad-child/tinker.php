@@ -1,6 +1,6 @@
 <?php
 
-$query1 = new wpdb('root', '', 'tsayg', 'localhost');
+$query1 = new wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 $tinker = $query1->get_results('SELECT `content` FROM `tinker` ORDER BY `id` DESC ', ARRAY_A);
 $content= $tinker[0]['content'];
 ?>

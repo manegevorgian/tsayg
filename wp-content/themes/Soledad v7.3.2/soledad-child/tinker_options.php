@@ -33,7 +33,7 @@ if( isset($_POST['tinker_input']) ) {
 
    $content=$_POST['tinker_input'];
     //deal with database in WordPress way
-    $query1 =new wpdb('root','','tsayg','localhost');
+    $query1 =new wpdb(DB_USER,DB_PASSWORD,DB_NAME,DB_HOST);
     $tinker_table = $query1->prefix."tinker";
     $query1->insert(
         $tinker_table,
