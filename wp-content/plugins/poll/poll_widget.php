@@ -20,21 +20,21 @@ $answers=explode('/',$poll[0]['answers']);
                 </h5>
             </div>
             <div class="panel-body mt-0">
-                <ul class="list-group">
+                <ul class="list-group ">
                     <?php foreach ($answers as $answer){ ?>
                     <li class="list-group-item">
                         <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios">
-                                <h4 class="text-center" ><?php echo $answer ?></h4>
+                            <label style="word-break: break-all">
+                                <input type="radio" name="optionsRadios" class="mr-2">
+                                <?php echo $answer ?>
                             </label>
                         </div>
                     </li>
                     <?php } ?>
                 </ul>
             </div>
-            <div class="panel-footer">
-                <button type="button" class="btn btn-danger btn-sm mt-3">
+            <div class="panel-footer d-flex justify-content-end">
+                <button type="button" class="btn btn-danger btn-sm mt-2">
                     Vote</button>
         </div>
     </div>
