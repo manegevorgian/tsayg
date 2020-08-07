@@ -55,7 +55,7 @@ add_shortcode('tinker', 'wpb_tinker_shortcode');
 
 ?>
     <div class="right-header-wrap">
-        <?php// echo do_shortcode( '[tinker]' ); ?>
+        <?php echo do_shortcode( '[tinker]' ); ?>
     </div>
 <?php
 

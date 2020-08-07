@@ -6,7 +6,7 @@
 
     <form method="post" action="">
         <div class="container" id="container" style="display: flex;color: #4cae4c; flex-direction: column; width:30%">
-            <h3 class="text-center" style="color: #4cae4c; font-weight: bolder" >TCO Poll</h3>
+            <h3 class="text-center mt-5" style="color: #4cae4c; font-weight: bolder" >TCO Poll</h3>
             <div id="form-inputs">
                 <div class="form-group">
                     <label for="question">Set the Question</label>
@@ -75,7 +75,7 @@ $tableName = "wp_tco_poll";
 $dbPrefix = DB_NAME;
 $sql = "CREATE TABLE `$dbPrefix`.`$tableName` ( `id` INT NOT NULL AUTO_INCREMENT , `question` TEXT NOT NULL , `answers` TEXT NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB";
 $a = maybe_create_table($tableName, $sql);
-var_dump($a);
+
 
 $wpdb->insert(
     $tableName,

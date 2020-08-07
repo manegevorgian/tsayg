@@ -2,7 +2,10 @@
 
 $query1 = new wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 $tinker = $query1->get_results('SELECT `content` FROM `tinker` ORDER BY `id` DESC ', ARRAY_A);
-$content= $tinker[0]['content'];
+$content=explode('/',$tinker[1]['content']);
+$contents=implode(" | " ,$content);
+//var_dump( $content);;
+//var_dump($tinker); ;
 ?>
 <style>
     .tcontainer {
@@ -14,8 +17,8 @@ $content= $tinker[0]['content'];
     /* MIDDLE CONTAINER */
     .ticker-wrap {
         width: 100%;
-        height: 4%;
-        padding-top: 2px;
+        padding-bottom:  3px;
+        padding-top:  3px;
         padding-left: 100%; /* Push contents to right side of screen */
         background-color: #dd0000;
         color: #fff0ef;
@@ -47,12 +50,10 @@ $content= $tinker[0]['content'];
         padding: 0 2rem;
     }
 </style>
-
-
-<div class="tcontainer">
+<div class="tcontainer ">
     <div class="ticker-wrap">
-        <div class="ticker-move">
-            <div class="ticker-item"><?php echo $content; ?></div>
+        <div class="ticker-move ">
+            <div class="ticker-item "> <?= $contents ?></div>
         </div>
     </div>
 </div>
