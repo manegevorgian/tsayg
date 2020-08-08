@@ -15,44 +15,50 @@ $tableName = "wp_tco_poll_results";
 $dbPrefix = DB_NAME;
 $sql = "CREATE TABLE `$dbPrefix`.`$tableName` ( `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , `question` TEXT NOT NULL , `answer` TEXT NOT NULL , `count` INT NOT NULL ) ENGINE = InnoDB";
 $a = maybe_create_table($tableName, $sql);
-$poll_results = $wpdb->get_results('SELECT  `count` FROM `wp_tco_poll` WHERE `question`=`$question` ',ARRAY_A);
 
+
+$poll_results = $wpdb->get_results('SELECT  `count` FROM `wp_tco_poll` ',ARRAY_A);
+var_dump($poll_results);
     if(isset($_POST['answer'])){
         $checked=$_POST['answer'];
-
         for($i=0;$i<count($answers);$i++) {
             $results[$checked] = 0;
-            if ($poll_results < 1) {
-                for ($i = 0; $i < count($answers); $i++) {
-                    if ($checked == $answers[$i]) {
-                        $results[$checked] += 1;
-                    }
-                }
-                $wpdb->insert(
-                    $tableName,
-                    array(
-                        'question' => $question,
-                        'answer' => $checked,
-                        'count' => $results[$checked]
-                    ),
-                    array(
-                        '%s',
-                        '%s',
-                        '%d'
-                    )
-                );
-            } else {
-
-                for ($i = 0; $i < count($answers); $i++) {
-                    if ($checked == $answers[$i]) {
-                        $results[$checked] += 1;
-                    }
-                }
-                $update = $wpdb->query("UPDATE `wp_tco_poll_results` SET `question`=[$question],`answer`=[$checked],`count`=[$results[$checked]]");
-
-            }
         }
-    }
+        if ($poll_results < 1) {
+            for ($i = 0; $i < count($answers); $i++) {
+                if ($checked == $answers[$i]) {
+                    $results[$checked] += 1;
+                }
+            }
+            $wpdb->insert(
+                $tableName,
+                array(
+                    'question' => $question,
+                    'answer' => $checked,
+                    'count' => $results[$checked]
+                ),
+                array(
+                    '%s',
+                    '%s',
+                    '%d'
+                )
+            );
+        } else {
+
+            for ($i = 0; $i < count($answers); $i++) {
+                if ($checked == $answers[$i]) {
+                    $results[$checked] += 1;
+                }
+            }
+            $update = $wpdb->query("
+                        UPDATE  `wp_tco_poll_results`
+                        SET     `question`=`$question`,
+                                `answer`=`$checked`,
+                                `count`=`$results[$checked]`");
+
+        }
+        }
+
 //var_dump($results);
 ?>
 
@@ -72,7 +78,7 @@ $poll_results = $wpdb->get_results('SELECT  `count` FROM `wp_tco_poll` WHERE `qu
                             <div class="radio">
                                 <label style="word-break: break-all">
                                     <input type="radio" name="answer" class="mr-2 " value="<?php echo $answer ?>">
-                                    <?php echo $answer ?>
+                                    <?= $answer ?>
                                 </label>
                             </div>
                         </li>
