@@ -20,7 +20,7 @@ $contents=implode(" | " ,$content);
         padding-bottom:  3px;
         padding-top:  3px;
         padding-left: 100%; /* Push contents to right side of screen */
-        background-color: #dd0000;
+        background-color: #dc3545;
         color: #fff0ef;
         font-weight: bold;
     }

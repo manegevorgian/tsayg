@@ -8,7 +8,9 @@ Author:      TCO Team
 Author URI:  https://google.com
 Text Domain: tco-poll
 */
-add_action('init','registerPlugin');
+//    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    
+    add_action('init','registerPlugin');
 function registerPlugin(){
     register_activation_hook(__FILE__,'pollPluginCallback');
 
@@ -70,7 +72,7 @@ class Tco_Poll_Widget extends WP_Widget {
     // Update widget settings
     public function update( $new_instance, $old_instance ) {
         $instance = $old_instance;
-        $instance['title']    = isset( $new_instance['title'] ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
+        $instance['title'] = isset( $new_instance['title'] ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
         return $instance;
     }
 

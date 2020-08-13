@@ -72,7 +72,7 @@ $temp=substr($response,152,2);
 
 
 ?>
-<div style="display: flex;flex-direction: column;margin-left: 40px; align-items: center; width: max-content">
+<div style="display: flex;flex-direction: column;margin-left: 10px; align-items: center; width: max-content">
     <div style="display: flex;flex-direction: row; width: max-content">
         <?php foreach ($ratesArray as $key => $rate) { ?>
             <div style="display: flex; margin:5px; font-weight: bold;">
@@ -97,5 +97,12 @@ $temp=substr($response,152,2);
         hours = hours <= 9 ? `0${hours}` : hours;
         document.getElementById("time").innerText = `${hours}:${minutes}:${seconds}`;
     }, 1000);
+    
+    // axios.post('asdasd', data).then(res => {
+    //
+    // }).catch(err => {
+    //
+    // });
+  
 </script>
 
