@@ -21,7 +21,67 @@ function pollPluginCallback()
     <script>alert('plugin activated')</script>
 <?php
 }
+    
+//    if ( ! function_exists('tco_post_types') ) {
 
+//// Register Custom Post Type
+//        function tco_post_types() {
+//
+//            $labels = array(
+//                'name'                  => _x( 'Polls', 'Post Type General Name', 'tsayg' ),
+//                'singular_name'         => _x( 'Poll', 'Post Type Singular Name', 'tsayg' ),
+//                'menu_name'             => __( 'TCO Poll', 'tsayg' ),
+//                'name_admin_bar'        => __( 'TCO Poll', 'tsayg' ),
+//                'archives'              => __( 'Item Archives', 'tsayg' ),
+//                'attributes'            => __( 'Item Attributes', 'tsayg' ),
+//                'parent_item_colon'     => __( 'Parent Item:', 'tsayg' ),
+//                'all_items'             => __( 'All Items', 'tsayg' ),
+//                'add_new_item'          => __( 'Add New Item', 'tsayg' ),
+//                'add_new'               => __( 'Add New', 'tsayg' ),
+//                'new_item'              => __( 'New Item', 'tsayg' ),
+//                'edit_item'             => __( 'Edit Item', 'tsayg' ),
+//                'update_item'           => __( 'Update Item', 'tsayg' ),
+//                'view_item'             => __( 'View Item', 'tsayg' ),
+//                'view_items'            => __( 'View Items', 'tsayg' ),
+//                'search_items'          => __( 'Search Item', 'tsayg' ),
+//                'not_found'             => __( 'Not found', 'tsayg' ),
+//                'not_found_in_trash'    => __( 'Not found in Trash', 'tsayg' ),
+//                'featured_image'        => __( 'Featured Image', 'tsayg' ),
+//                'set_featured_image'    => __( 'Set featured image', 'tsayg' ),
+//                'remove_featured_image' => __( 'Remove featured image', 'tsayg' ),
+//                'use_featured_image'    => __( 'Use as featured image', 'tsayg' ),
+//                'insert_into_item'      => __( 'Insert into item', 'tsayg' ),
+//                'uploaded_to_this_item' => __( 'Uploaded to this item', 'tsayg' ),
+//                'items_list'            => __( 'Items list', 'tsayg' ),
+//                'items_list_navigation' => __( 'Items list navigation', 'tsayg' ),
+//                'filter_items_list'     => __( 'Filter items list', 'tsayg' ),
+//            );
+//            $args = array(
+//                'label'                 => __( 'Poll', 'tsayg' ),
+//                'description'           => __( 'TCO Poll Description', 'tsayg' ),
+//                'labels'                => $labels,
+//                'supports'              => array( 'title', 'editor' ),
+//                'hierarchical'          => false,
+//                'public'                => true,
+//                'show_ui'               => true,
+//                'show_in_menu'          => true,
+//                'menu_position'         => 5,
+//                'menu_icon'             => 'dashicons-format-status',
+//                'show_in_admin_bar'     => true,
+//                'show_in_nav_menus'     => true,
+//                'can_export'            => true,
+//                'has_archive'           => true,
+//                'exclude_from_search'   => false,
+//                'publicly_queryable'    => true,
+//                'capability_type'       => 'page',
+//            );
+//            register_post_type( 'tco_poll', $args );
+//
+//        }
+//        add_action( 'init', 'tco_post_types', 0 );
+//
+//    }
+//
 function tco_poll_menu_page() {
     add_menu_page(
         'TCO Poll',
@@ -119,3 +179,23 @@ function wpb_tco_poll_shortcode() {
 }
 //poll shortcode
 add_shortcode('tco-poll', 'wpb_tco_poll_shortcode');
+    
+    
+    
+    add_action('wp_ajax_poll_ajax_request', 'poll_ajax_request');
+    
+    function poll_ajax_request()
+    {
+        global $wpdb; // this is how you get access to the database
+        
+        $quest = intval( $_POST['quest'] );
+        $q_ans=$wpdb->get_results("SELECT `answer` FROM wp_tco_poll_answers WHERE `question_id`='$quest'",ARRAY_A)  ;
+        $inputs = '';
+        foreach($q_ans as $ans) {
+            $inputs .= "<input class='mb-3' type='text' value='".$ans['answer']."' />";
+        }
+        $div = "<div class='container col-6 modal-show'>".$inputs."</div>";
+        echo $div;
+        wp_die();
+    }
+    

@@ -54,9 +54,9 @@ function wpb_tinker_shortcode() {
 add_shortcode('tinker', 'wpb_tinker_shortcode');
 
 ?>
-    <div class="right-header-wrap">
-        <?php echo do_shortcode( '[tinker]' ); ?>
-    </div>
+<!--    <div class="right-header-wrap">-->
+<!--        --><?php //echo do_shortcode( '[tinker]' ); ?>
+<!--    </div>-->
 <?php
 
 //redirect to homepage after logout
@@ -73,3 +73,17 @@ function logout_without_confirm($action, $result)
         die;
     }
 }
+//    add_action('wp_ajax_poll_ajax_request', 'poll_ajax_request');
+//
+//    function poll_ajax_request()
+//    {
+//        global $wpdb; // this is how you get access to the database
+//
+//        $quest = intval( $_POST['quest'] );
+//
+////        $whatever += 10;
+//
+//        echo $quest;
+//
+//        wp_die(); // this is
+//    }
