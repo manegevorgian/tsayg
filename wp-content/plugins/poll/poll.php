@@ -189,13 +189,36 @@ add_shortcode('tco-poll', 'wpb_tco_poll_shortcode');
         global $wpdb; // this is how you get access to the database
         
         $quest = intval( $_POST['quest'] );
-        $q_ans=$wpdb->get_results("SELECT `answer` FROM wp_tco_poll_answers WHERE `question_id`='$quest'",ARRAY_A)  ;
+       $q=$wpdb->get_row("SELECT `question` FROM wp_tco_poll_questions WHERE `id`='$quest'",ARRAY_A);
+     
+       $q_quest=$q["question"];
+        $q_ans=$wpdb->get_results("SELECT `answer`,`id` FROM wp_tco_poll_answers WHERE `question_id`='$quest'",ARRAY_A)  ;
         $inputs = '';
+        $inputs .= "<p>Question</p><input class='mb-3 changed-question' type='text' name='".$q_quest."' value='".$q_quest."' />";
         foreach($q_ans as $ans) {
-            $inputs .= "<input class='mb-3' type='text' value='".$ans['answer']."' />";
+            $inputs .= "<p>Answer</p><input class='mb-3 changed-answer ' type='text' ans_id='".$ans['id']."' name='".$ans['answer']."' value='".$ans['answer']."' />";
         }
+        
         $div = "<div class='container col-6 modal-show'>".$inputs."</div>";
         echo $div;
         wp_die();
     }
+    add_action('wp_ajax_save_changes_ajax_request', 'save_changes_ajax_request');
     
+    function save_changes_ajax_request()
+    {
+        global $wpdb;
+       if(isset($_POST["changed_q"])){
+           $changed_q=$_POST["changed_q"];
+           $q=$wpdb->get_row("SELECT `id` FROM wp_tco_poll_questions WHERE `question`='$changed_q'",ARRAY_A);
+           $changed_a=[];
+           $q_quest=$q["id"];
+           $changed_a=$_POST["changed_a"];
+           for($a=0;$a<count($changed_a);$a++){
+               $update = $wpdb->query("UPDATE wp_tco_poll_answers SET `answer`='$changed_a[$a]', WHERE `question_id`='$q_quest'");
+           }
+           
+       }
+        
+        wp_die();
+    }

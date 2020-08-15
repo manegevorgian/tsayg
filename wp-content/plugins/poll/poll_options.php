@@ -66,7 +66,7 @@
                 <div id="form-inputs">
                     <div class="form-group">
                         <label for="question">Set the Question</label>
-                        <input name="question" type="text" id="question" class="form-control" placeholder="Question">
+                        <input name="question" type="text" id="question" class="form-control" placeholder="Question" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -79,7 +79,7 @@
         </form>
     </div>
     <div class="col-6">
-        <form method="post" action="">
+        
             <div style="display: flex;color: #4cae4c; flex-direction: column;">
                 <h3 class="text-center mt-5" style="color: #4cae4c; font-weight: bolder">Current Poll</h3>
                 <table class="table">
@@ -90,6 +90,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <form method="post" action="">
                     <?php foreach ($questions as $q) { ?>
                         <tr>
                             <th scope="col"><?= $q["question"] ?></th>
@@ -103,6 +104,7 @@
                             </td>
                         </tr>
                     <?php } ?>
+                    </form>
                     </tbody>
                 </table>
                 <div>
@@ -117,16 +119,17 @@
                                 </button>
                             </div>
                             <div class="modal-body">
+                            
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success">Save changes</button>
+                                <button type="button" class="btn btn-success save" data-dismiss="modal">Save changes</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        
     </div>
     
 </div>
@@ -136,21 +139,24 @@
         let addAnswer = jQuery('#addAnswer');
         let i = 0;
         addAnswer.on('click', function () {
-            container.append(`<div class="form-group" id="answer-div"><label for="answer">Answer</label><input type='text' name=${i++} class='form-control' placeholder='Enter the Answer'></div>`);
+            container.append(`<div class="form-group" ><label for="answer">Answer</label><input type='text' name=${i++} class='form-control  answerdiv' placeholder='Enter the Answer'></div>`);
+            if(jQuery(".answerdiv").attr("name")==='1' || jQuery(".answerdiv").attr("name")==='0' ){
+                jQuery(".answerdiv").attr("required", "true");
+            }
+            
         });
     })
     jQuery(document).ready(function ($) {
-        jQuery(".show").on("click", function (event) {
-            jQuery.ajax({
+        $(".show").on("click", function (event) {
+            $.ajax({
                 url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
                 method: 'post',
                 data: {
                     'action': 'poll_ajax_request', // This is our PHP function below
-                    'quest': jQuery(this).data("quest")// This is the variable we are sending via AJAX
+                    'quest': $(this).data("quest")// This is the variable we are sending via AJAX
                 },
                 success: res => {
-                    console.log(res)
-                    jQuery('.modal-body').empty().append(res)
+                    $('.modal-body').empty().append(res)
                     // jQuery('#pollOptions').parent().empty().append(res)
                 },
                 error: err => {
@@ -158,8 +164,36 @@
                 }
             })
         })
+        jQuery(".modal").on("click", ".save", function (event) {
+            let changed_a= [];
+            let a_id= [];
+            jQuery(".changed-answer").map(function () {
+                changed_a.push(this.name);
+                a_id.push(this.attr("ans_id"));
+            });
+            console.log(a_id);
+            let changed_q=$(".changed-question").attr("name");
+            $.ajax({
+                url: ajaxurl,
+                method: 'post',
+                data: {
+                    'action': 'save_changes_ajax_request',
+                    'changed_a': changed_a,
+                    'changed_q': changed_q,
+                         'a_id': a_id
+                },
+                success: res => {
+                    console.log(res)
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
+        })
+        
     })
 </script>
+
 
 <style>
     input[type="text"]:focus,
@@ -168,7 +202,4 @@
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
         outline: 0 none;
     }
-
-
 </style>
-

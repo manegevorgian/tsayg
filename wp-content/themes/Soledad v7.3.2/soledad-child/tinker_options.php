@@ -7,21 +7,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container mt-5">
-
-<form class="form-group " action="" method="post">
-    <h1 class=" text-primary text-center">Tinker</h1>
-    <div id="form-inputs" class="w-300">
-
+    <div class="container mt-5">
+        <div class="flex-row">
+            <form class="form-group " action="" method="post">
+                <h1 class=" text-primary text-center">Tinker</h1>
+                <div id="form-inputs" class="w-300"></div>
+                <div class="form-group">
+                    <button type="button" id="addNews" class="btn btn-secondary btn-group-lg">+Add New</button>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-group-lg"></button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <button type="button" id="addNews" class="btn btn-secondary btn-group-lg">+Add New</button>
-    </div>
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary btn-group-lg">
-    </div>
-</form>
-</div>
 </body>
 </html>
 <script>
@@ -33,12 +32,8 @@
             container.append(`<div class="form-group"><input type='text' name=${i++} class='form-control' placeholder='Write Content News'></div>`);
         });
         let news = document.querySelectorAll(".form-control");
-        console.log(news);
-        // for(let i=1;i<=answers.length;i++){
-        // $( "#answer" ).attr({
-        //    name: i
-        // });
-        // }
+        
+        
     });
 
 </script>
