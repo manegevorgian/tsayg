@@ -121,7 +121,7 @@ class Tco_Poll_Widget extends WP_Widget {
         // Parse current settings with defaults
         extract( wp_parse_args( ( array ) $instance, $defaults ) ); ?>
 
-        <?php // Widget Title ?>
+     <?php // Widget Title ?>
         <p>
             <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Widget Title', 'text_domain' ); ?></label>
             <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
@@ -189,14 +189,12 @@ add_shortcode('tco-poll', 'wpb_tco_poll_shortcode');
         global $wpdb; // this is how you get access to the database
         
         $quest = intval( $_POST['quest'] );
-       $q=$wpdb->get_row("SELECT `question` FROM wp_tco_poll_questions WHERE `id`='$quest'",ARRAY_A);
-     
-       $q_quest=$q["question"];
+        $q=$wpdb->get_row("SELECT `question`,`id` FROM wp_tco_poll_questions WHERE `id`='$quest'",ARRAY_A);
         $q_ans=$wpdb->get_results("SELECT `answer`,`id` FROM wp_tco_poll_answers WHERE `question_id`='$quest'",ARRAY_A)  ;
         $inputs = '';
-        $inputs .= "<p>Question</p><input class='mb-3 changed-question' type='text' name='".$q_quest."' value='".$q_quest."' />";
+        $inputs .= "<p>Question</p><input class='mb-3 changed-question' type='text' id='".$q['id']."' name='".$q['question']."' value='".$q['question']."' />";
         foreach($q_ans as $ans) {
-            $inputs .= "<p>Answer</p><input class='mb-3 changed-answer ' type='text' ans_id='".$ans['id']."' name='".$ans['answer']."' value='".$ans['answer']."' />";
+            $inputs .= "<p>Answer</p><div  class='d-inline-flex ".$ans['id']."'><input class='mb-3 changed-answer ' type='text' id='".$ans['id']."' name='".$ans['answer']."' value='".$ans['answer']."' /><button id='".$ans['id']."' type='button' class='btn rounded btn-outline-secondary h-25 p-1 ans-delete '>✘</button></div>";
         }
         
         $div = "<div class='container col-6 modal-show'>".$inputs."</div>";
@@ -208,17 +206,20 @@ add_shortcode('tco-poll', 'wpb_tco_poll_shortcode');
     function save_changes_ajax_request()
     {
         global $wpdb;
-       if(isset($_POST["changed_q"])){
+       if(isset($_POST["changed_q"]) && $_POST["changed_q"]!=''){
            $changed_q=$_POST["changed_q"];
-           $q=$wpdb->get_row("SELECT `id` FROM wp_tco_poll_questions WHERE `question`='$changed_q'",ARRAY_A);
+           $q_id=$_POST["q_id"];
+           $q=$wpdb->get_row("SELECT `id` FROM wp_tco_poll_questions WHERE `id`='$q_id'",ARRAY_A);
+           var_dump($q);
            $changed_a=[];
-           $q_quest=$q["id"];
+           $a_id=[];
            $changed_a=$_POST["changed_a"];
-           for($a=0;$a<count($changed_a);$a++){
-               $update = $wpdb->query("UPDATE wp_tco_poll_answers SET `answer`='$changed_a[$a]', WHERE `question_id`='$q_quest'");
+           $a_id=$_POST["a_id"];
+           for($a=0;$a<count($changed_a); $a++ ){
+               if($changed_a[$a]!='') $update_a = $wpdb->query("UPDATE wp_tco_poll_answers SET `answer`='$changed_a[$a]' WHERE `id`='$a_id[$a]'");
            }
-           
+           if($changed_q!='')$update_q = $wpdb->query("UPDATE wp_tco_poll_questions SET `question`='$changed_q' WHERE `id`='$q_id'");
        }
-        
+        echo 'question has been successfully updated';
         wp_die();
     }

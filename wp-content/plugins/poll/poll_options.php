@@ -163,16 +163,16 @@
                     console.log("it isn't working");
                 }
             })
-        })
-        jQuery(".modal").on("click", ".save", function (event) {
+        });
+        $(".modal").on("click", ".save", function (event) {
             let changed_a= [];
             let a_id= [];
-            jQuery(".changed-answer").map(function () {
-                changed_a.push(this.name);
-                a_id.push(this.attr("ans_id"));
+            $(".changed-answer").map(function () {
+                changed_a.push(this.value);
+                a_id.push(this.id);
             });
-            console.log(a_id);
-            let changed_q=$(".changed-question").attr("name");
+            let changed_q=$(".changed-question").val();
+            let q_id=$(".changed-question").attr('id');
             $.ajax({
                 url: ajaxurl,
                 method: 'post',
@@ -180,7 +180,8 @@
                     'action': 'save_changes_ajax_request',
                     'changed_a': changed_a,
                     'changed_q': changed_q,
-                         'a_id': a_id
+                         'a_id': a_id,
+                         'q_id': q_id
                 },
                 success: res => {
                     console.log(res)
@@ -189,6 +190,10 @@
                     console.log("it isn't working");
                 }
             })
+        })
+        $(".modal").on("click", ".ans-delete", function (event) {
+           let btn_id=$(".changed-question").parent().hide();
+           
         })
         
     })
