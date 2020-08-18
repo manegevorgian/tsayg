@@ -79,59 +79,54 @@
         </form>
     </div>
     <div class="col-6">
-        
-            <div style="display: flex;color: #4cae4c; flex-direction: column;">
-                <h3 class="text-center mt-5" style="color: #4cae4c; font-weight: bolder">Current Poll</h3>
-                <table class="table">
-                    <thead>
+        <div style="display: flex;color: #4cae4c; flex-direction: column;">
+            <h3 class="text-center mt-5" style="color: #4cae4c; font-weight: bolder">Current Poll</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Question</th>
+                    <th scope="col" class="mr-0">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <form method="post" action="">
+                <?php foreach ($questions as $q) { ?>
                     <tr>
-                        <th scope="col">Question</th>
-                        <th scope="col" class="mr-0">Actions</th>
+                        <th scope="col" class="<?= $q["id"] ?>"><?= $q["question"] ?></th>
+                        <td scope="col">
+                            <button type="button" class=" btn btn-outline-success btn-sm mr-0  <?= $q["id"] ?> show "
+                                    data-quest="<?= $q["id"] ?>" data-toggle="modal" data-target="#exampleModal">Show
+                            </button>
+                            <button type="button" class=" btn btn-outline-danger btn-sm mr-0 <?= $q["id"] ?>  delete"
+                                    data-quest="<?= $q["id"] ?> ">Delete
+                            </button>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <form method="post" action="">
-                    <?php foreach ($questions as $q) { ?>
-                        <tr>
-                            <th scope="col"><?= $q["question"] ?></th>
-                            <td scope="col">
-                                <button type="button" class=" btn btn-outline-success btn-sm mr-0   show "
-                                        data-quest="<?= $q["id"] ?>" data-toggle="modal" data-target="#exampleModal">Show
-                                </button>
-                                <button type="button" class=" btn btn-outline-danger btn-sm mr-0  delete"
-                                        data-quest="<?= $q["id"] ?>" data-toggle="modal" data-target="#exampleModal">Delete
-                                </button>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                    </form>
-                    </tbody>
-                </table>
-                <div>
-                </div>
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Poll Answers</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                            
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success save" data-dismiss="modal">Save changes</button>
-                            </div>
+                <?php } ?>
+                </form>
+                </tbody>
+            </table>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Poll Answers</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success save" data-dismiss="modal">Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
-        
+        </div>
     </div>
-    
 </div>
 <script type='text/javascript'>
     window.addEventListener('load', function () {
@@ -192,9 +187,41 @@
             })
         })
         $(".modal").on("click", ".ans-delete", function (event) {
-           let btn_id=$(".changed-question").parent().hide();
-           
+           let btn_id=$(".ans-delete").attr("id");
+            $.ajax({
+                url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
+                method: 'post',
+                data: {
+                    'action': 'poll_ajax_delete_answer', // This is our PHP function below
+                    'ans_id': btn_id// This is the variable we are sending via AJAX
+                },
+                success: res => {
+                    $("."+btn_id).remove();
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
         })
+        $(".delete").on("click", function (event) {
+            let q_id=$(this).data("quest");
+            $.ajax({
+                url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
+                method: 'post',
+                data: {
+                    'action': 'poll_ajax_delete', // This is our PHP function below
+                    'quest': $(this).data("quest")// This is the variable we are sending via AJAX
+                },
+                success: res => {
+                   // $('.modal-body').empty().append(res)
+                    console.log("well done");
+                    $('.'+ q_id).remove();
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
+        });
         
     })
 </script>
@@ -207,4 +234,5 @@
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
         outline: 0 none;
     }
+    
 </style>

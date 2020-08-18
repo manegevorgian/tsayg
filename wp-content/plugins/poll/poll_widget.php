@@ -17,39 +17,41 @@
   $sql = "CREATE TABLE `$dbPrefix`.`$tableName` ( `id` INT NOT NULL AUTO_INCREMENT , `question_id` TEXT NOT NULL, `answer_id` INT NOT NULL, `ip` TEXT NOT NULL, `voted_at` TIMESTAMP  DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`)) ENGINE = InnoDB";
   $a = maybe_create_table($tableName, $sql);
     if (isset($_POST['answer'])) {
-        $checked = $_POST['answer'];
-        $a_id=$wpdb->get_row("SELECT `id` FROM `wp_tco_poll_answers` WHERE `answer`='$checked'",ARRAY_A);
-        var_dump($a_id);
+        $a_id = $_POST['answer'];
+        //$a_id=$wpdb->get_row("SELECT `id` FROM `wp_tco_poll_answers` WHERE `answer`='$checked'",ARRAY_A);
+        //var_dump($a_id);
         $wpdb->insert(
             $tableName,
             array(
                 'question_id' => $q_id,
-                'answer_id' => $a_id["id"],
+                'answer_id' => $a_id,
                 'ip' => $ip
             ),
             array(
-                '%d',
-                '%d',
+                '%s',
+                '%s',
                 '%s'
             )
         );
     }
   $results= $wpdb->get_results("SELECT `answer_id`,`question_id`,`ip` FROM `wp_tco_poll_results` WHERE `question_id`='$q_id'",ARRAY_A);
-    $k = 0;
-    foreach ($results as $r) {
-        if ($r["ip"] != $_SERVER['REMOTE_ADDR'] && $r["question_id"] != $q_id) $k++;
-    };
-    $voits=[];
-    $voit_ans=[];
-   $all_count_query=$wpdb->get_row("SELECT COUNT(`question_id`) FROM `wp_tco_poll_results` WHERE `question_id`='$q_id'",ARRAY_A);
-    $all_count=$all_count_query["COUNT(`question_id`)"];
+    $k=0;
+    //var_dump($results);
+  foreach ($results as $r) {
+     if ($r["ip"] != $_SERVER['REMOTE_ADDR'] && $r["question_id"] != $q_id) $k++;
+  };
+  $votes=[];
+  $vote_ans=[];
+   $all_count_query = $wpdb->get_row("SELECT COUNT(`question_id`) FROM `wp_tco_poll_results` WHERE `question_id`='$q_id'",ARRAY_A);
+    $all_count = $all_count_query["COUNT(`question_id`)"];
+    $vote_query = [];
    foreach ($answers as $answer){
-       $a=$answer["id"];
-       $voit_query=$wpdb->get_row("SELECT COUNT(`question_id`) FROM `wp_tco_poll_results`  WHERE `question_id`='$q_id' && `answer_id`='$a' GROUP BY `question_id`",ARRAY_A);
-       
-       array_push($voits,$voit_query["COUNT(`question_id`)"]);
-       array_push($voit_ans,$answer["answer"]);
+       $a= $answer["id"];
+       array_push($vote_query, $wpdb->get_row("SELECT COUNT(id) FROM wp_tco_poll_results  WHERE answer_id='$a'",ARRAY_A));
+       array_push($vote_ans, $answer["answer"]);
    }
-   
+   foreach ($vote_query as $v){
+       array_push($votes,$v["COUNT(id)"]);
+   }
     require_once "poll_widget_form.php";
 ?>

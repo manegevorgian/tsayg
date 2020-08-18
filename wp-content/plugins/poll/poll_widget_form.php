@@ -14,7 +14,7 @@
                           <li class="list-group-item p-1">
                               <div class="radio">
                                   <label style="word-break: break-all">
-                                      <input type="radio" name="answer" class="mr-2 " value="<?php echo $answer["answer"] ?>">
+                                      <input type="radio" name="answer" class="mr-2 " value="<?php echo $answer["id"] ?>">
                                     <?= $answer["answer"] ?>
                                   </label>
                               </div>

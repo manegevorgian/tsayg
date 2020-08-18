@@ -16,7 +16,7 @@
                     <button type="button" id="addNews" class="btn btn-secondary btn-group-lg">+Add New</button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-group-lg"></button>
+                    <button type="submit" class="btn btn-primary btn-group-lg">Submit</button>
                 </div>
             </form>
         </div>

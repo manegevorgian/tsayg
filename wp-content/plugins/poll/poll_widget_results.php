@@ -7,11 +7,11 @@
         </div>
         <div class="panel-body mt-0">
             <ul class="list-group ">
-                <?php for($a=0;$a<count($voit_ans);$a++) { ?>
+                <?php for($aa=0;$aa<count($vote_ans);$aa++) { ?>
                     <li class="list-group-item p-1">
                         <div class="ans " style="display: flex;justify-content: space-between;align-items: center">
-                            <p style="word-break: break-all; font-size: 15px"><?= $voit_ans[$a] ?></p>
-                            <div class="result bg-danger rounded-circle"><?= round($voits[$a]*100/$all_count)?>%</div>
+                            <p style="word-break: break-all; font-size: 15px"><?= $vote_ans[$aa] ?> <?php //var_dump($vote_query);?></p>
+                            <div class="result"><p><?= round($votes[$aa]*100/$all_count)?>%</p></div>
                         </div>
                     </li>
                 <?php } ?>
@@ -26,17 +26,26 @@
         display:none;
     }
 .result{
-    width:30px;
-    height: 30px;
+    width:35px;
+    height: 35px;
     border: 1px solid #dc3545;
+    background-color: #dc3545;
     border-radius: 50px;
-    padding: 3px;
     color: #ffffff;
     font-size: small;
-    
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    transition: .3s all;
 }
-    p{
-        margin-bottom: 0;
-    }
+
+div.result:hover {
+    opacity: .8;
+    font-weight: bold;
+}
+
+p {
+    margin-bottom: 0;
+}
 </style>
 
