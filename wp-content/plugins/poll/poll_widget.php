@@ -7,10 +7,10 @@
 <?php
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
   $ip=$_SERVER['REMOTE_ADDR'];
-  $poll = $wpdb->get_results('SELECT `id`, `question` FROM `wp_tco_poll_questions` ORDER BY `id` DESC ', ARRAY_A);
-  $question = $poll[0]['question'];
-  $question_id=$wpdb->get_row("SELECT `id` FROM `wp_tco_poll_questions` WHERE `question`='$question'",ARRAY_A);
-  $q_id=$question_id["id"];
+  $question_id=$wpdb->get_row("SELECT `question_id` FROM `wp_tco_poll_active`",ARRAY_A);
+  $q_id=$question_id["question_id"];
+  $poll = $wpdb->get_row("SELECT `id`, `question` FROM `wp_tco_poll_questions` WHERE `id`='$q_id' ", ARRAY_A);
+  $question = $poll['question'];
   $answers = $wpdb->get_results("SELECT `id`, `answer` FROM `wp_tco_poll_answers` WHERE `question_id`='$q_id'", ARRAY_A);
   $tableName = 'wp_tco_poll_results';
   $dbPrefix = DB_NAME;

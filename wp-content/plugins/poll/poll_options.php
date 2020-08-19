@@ -10,15 +10,15 @@
     $answers = [];
     $tableName1 = "wp_tco_poll_questions";
     $tableName2 = "wp_tco_poll_answers";
+    $tableName3 ="wp_tco_poll_active";
     $dbPrefix = DB_NAME;
     $sql1 = "CREATE TABLE `$dbPrefix`.`$tableName1` ( `id` INT NOT NULL AUTO_INCREMENT , `question` TEXT NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB";
     $sql2 = "CREATE TABLE `$dbPrefix`.`$tableName2` ( `id` INT NOT NULL AUTO_INCREMENT , `question_id` INT NOT NULL , `answer` TEXT NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB";
-    
+    $sql3 = "CREATE TABLE `$dbPrefix`.`$tableName3` ( `id` INT NOT NULL AUTO_INCREMENT , `question_id` INT NOT NULL ,PRIMARY KEY (`id`)) ENGINE = InnoDB;";
     $a1 = maybe_create_table($tableName1, $sql1);
     $a2 = maybe_create_table($tableName2, $sql2);
-    
-    function checking($x)
-    {
+    $a3 = maybe_create_table($tableName3, $sql3);
+    function checking($x){
         return $x != "" ? true : false;
     }
     
@@ -53,10 +53,10 @@
             )
         );
     }
-    
-    
     $questions = $wpdb->get_results('SELECT `id`, `question` FROM `wp_tco_poll_questions` ORDER BY `id` DESC ', ARRAY_A);
-  
+    $active = $wpdb->get_row('SELECT `question_id` FROM `wp_tco_poll_active`', ARRAY_A);
+    $act=$active["question_id"];
+    var_dump($act);
 ?>
 <div class="container row" id="pollOptions">
     <div class="col-6">
@@ -84,15 +84,19 @@
             <table class="table">
                 <thead>
                 <tr>
+                    <th scope="col"></th>
                     <th scope="col">Question</th>
                     <th scope="col" class="mr-0">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <form method="post" action="">
+                <form class="active-form" method="post" action="">
                 <?php foreach ($questions as $q) { ?>
                     <tr>
-                        <th scope="col" class="<?= $q["id"] ?>"><?= $q["question"] ?></th>
+                        <td style="word-break: break-all;width: 5px">
+                            <input type="radio" <?php if($q["id"]==$act) echo 'checked' ?>  name="answer" class="mr-2 radio" value="<?php echo $q["id"] ?>" >
+                            <th scope="col" class="<?= $q["id"] ?>"><?= $q["question"] ?></th>
+                        </td>
                         <td scope="col">
                             <button type="button" class=" btn btn-outline-success btn-sm mr-0  <?= $q["id"] ?> show "
                                     data-quest="<?= $q["id"] ?>" data-toggle="modal" data-target="#exampleModal">Show
@@ -222,17 +226,58 @@
                 }
             })
         });
-        
+        $(".radio").on("change",function (event){
+            
+            $.ajax({
+                url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
+                method: 'post',
+                data: {
+                    'action': 'poll_ajax_active', // This is our PHP function below
+                    'quest': $(this).attr("value")// This is the variable we are sending via AJAX
+                },
+                success: res => {
+                    console.log(res);
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
+        })
     })
 </script>
-
-
 <style>
     input[type="text"]:focus,
     .uneditable-input:focus {
         border-color: rgba(126, 239, 104, 0.8);
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
         outline: 0 none;
+    }
+    input[type='radio']:after {
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+        top: -1px;
+        left: -1px;
+        position: relative;
+        background-color: #d1d3d1;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 2px solid white;
+    }
+
+    input[type='radio']:checked:after {
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+        top: -15px;
+        left: -1px;
+        position: relative;
+        background-color: #00a000;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 2px solid white;
     }
     
 </style>
