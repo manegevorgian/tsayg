@@ -27,6 +27,9 @@
 
 <body <?php body_class(); ?>>
 <?php
+    require_once(realpath($_SERVER["DOCUMENT_ROOT"]).'\wp-content\themes\Soledad v7.3.2\soledad-child\tinker.php') ?>
+
+<?php
 if( get_theme_mod( 'penci_custom_code_after_body_tag' ) ):
 	echo do_shortcode( get_theme_mod( 'penci_custom_code_after_body_tag' ) );
 endif;

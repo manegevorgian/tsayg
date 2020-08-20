@@ -54,4 +54,13 @@
        array_push($votes,$v["COUNT(id)"]);
    }
     require_once "poll_widget_form.php";
+    
+//    add_action('wp_ajax_show_results_ajax_request', 'show_results_ajax_request');
+//    function show_results_ajax_request(){
+//        global $wpdb;
+//
+//        echo 'xaxa';
+//        wp_die();
+//    }
+
 ?>

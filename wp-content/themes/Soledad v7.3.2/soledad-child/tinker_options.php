@@ -7,10 +7,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 col">
         <div class="flex-row">
             <form class="form-group " action="" method="post">
-                <h1 class=" text-primary text-center">Tinker</h1>
+                <h1 class=" text-info text-center m-5">Commercial Line</h1>
                 <div id="form-inputs" class="w-300"></div>
                 <div class="form-group">
                     <button type="button" id="addNews" class="btn btn-secondary btn-group-lg">+Add New</button>
@@ -18,7 +18,33 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-group-lg">Submit</button>
                 </div>
+                <div class="form-group">
+                    <button type="button" class=" btn btn-info btn-group-lg mr-0 show " data-quest="" data-toggle="modal" data-target="#exampleModal">Show </button>
+                </div>
             </form>
+        </div>
+        <div class="col-6">
+            <div style="display: flex;color: #17a2b8; flex-direction: column;">
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Breaking News</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                            
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-info save" data-dismiss="modal">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -33,9 +59,66 @@
         });
         let news = document.querySelectorAll(".form-control");
         
-        
     });
-
+    jQuery(document).ready(function ($) {
+        $(".show").on("click", function (event) {
+            $.ajax({
+                url: ajaxurl,
+                method: 'post',
+                data: {
+                    'action': 'line_ajax_request',
+                },
+                success: res => {
+                    $('.modal-body').empty().append(res)
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
+        });
+        $(".modal").on("click", ".save", function (event) {
+            let changed_a = [];
+            let a_id = [];
+            $(".changed-answer").map(function () {
+                changed_a.push(this.value);
+                a_id.push(this.id);
+            });
+            $.ajax({
+                url: ajaxurl,
+                method: 'post',
+                data: {
+                    'action': 'save_changes_ajax_request',
+                    'changed_a': changed_a,
+                    'changed_q': changed_q,
+                    'a_id': a_id,
+                    'q_id': q_id
+                },
+                success: res => {
+                    console.log(res)
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
+        })
+        // $(".modal").on("click", ".ans-delete", function (event) {
+        //     let btn_id = $(".ans-delete").attr("id");
+        //     $.ajax({
+        //         url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
+        //         method: 'post',
+        //         data: {
+        //             'action': 'poll_ajax_delete_answer', // This is our PHP function below
+        //             'ans_id': btn_id// This is the variable we are sending via AJAX
+        //         },
+        //         success: res => {
+        //             $("." + btn_id).remove();
+        //         },
+        //         error: err => {
+        //             console.log("it isn't working");
+        //         }
+        //     })
+        // })
+    })
 </script>
 
 <style>
@@ -53,6 +136,11 @@
 
 <?php
 //insert input
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+$tableName = "wp_commercial_line";
+$dbPrefix = DB_NAME;
+$sql = "CREATE TABLE `$dbPrefix`.`$tableName` ( `id` INT NOT NULL AUTO_INCREMENT , `content` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
+$a = maybe_create_table($tableName, $sql);
 $news=[];
 function checking($x){
     return $x!=""?true:false;
@@ -60,19 +148,18 @@ function checking($x){
 $name=0;
 while(checking(isset($_POST["{$name}"]))){
     array_push($news,$_POST["{$name}"]);
+    var_dump($_POST["{$name}"]);
     $name++;
 }
-$content=implode("/" ,$news);
-    //deal with database in WordPress way
-    $query1 =new wpdb(DB_USER,DB_PASSWORD,DB_NAME,DB_HOST);
-    $tinker_table = $query1->prefix."tinker";
-    $query1->insert(
-        $tinker_table,
+for($i=0;$i<count($news);$i++){
+    $wpdb->insert(
+        $tableName,
         array(
-            'content'=>$content
+            'content'=>$news[$i]
         ),
         array(
             '%s'
         )
-    );
+    );}
+
 ?>

@@ -56,7 +56,6 @@
     $questions = $wpdb->get_results('SELECT `id`, `question` FROM `wp_tco_poll_questions` ORDER BY `id` DESC ', ARRAY_A);
     $active = $wpdb->get_row('SELECT `question_id` FROM `wp_tco_poll_active`', ARRAY_A);
     $act=$active["question_id"];
-    var_dump($act);
 ?>
 <div class="container row" id="pollOptions">
     <div class="col-6">

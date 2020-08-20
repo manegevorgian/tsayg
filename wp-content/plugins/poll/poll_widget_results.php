@@ -10,8 +10,8 @@
                 <?php for($aa=0;$aa<count($vote_ans);$aa++) { ?>
                     <li class="list-group-item p-1">
                         <div class="ans " style="display: flex;justify-content: space-between;align-items: center">
-                            <p style="word-break: break-all; font-size: 15px"><?= $vote_ans[$aa] ?> <?php //var_dump($vote_query);?></p>
-                            <div class="result"><p><?= round($votes[$aa]*100/$all_count)?>%</p></div>
+                            <p style="word-break: break-all; font-size: 15px"><?= $vote_ans[$aa][0] ?></p>
+                            <div class="result"><p><?php if($all_count!=0 && $all_count!=null) {echo round($votes[$aa]*100/$all_count);}?>%</p></div>
                         </div>
                     </li>
                 <?php } ?>

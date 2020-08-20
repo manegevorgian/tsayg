@@ -1,17 +1,21 @@
 <?php
-
-$query1 = new wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
-$tinker = $query1->get_results('SELECT `content` FROM `tinker` ORDER BY `id` DESC ', ARRAY_A);
-$content=explode('/',$tinker[1]['content']);
-$contents=implode(" | " ,$content);
-//var_dump( $content);;
-//var_dump($tinker); ;
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    
+    $content_array = $wpdb->get_results('SELECT `id`,`content` FROM `wp_commercial_line`', ARRAY_A);
+//$content=$tinker[0]['content'];
+//$contents=implode(" | " ,$content);
+    $content=[];
+    foreach ($content_array as $content_r){
+        
+        array_push($content,$content_r["content"]);
+    }
+    $contents=implode(" | " ,$content);
 ?>
 <style>
     .tcontainer {
         width: 100%;
         overflow: hidden; /* Hide scroll bar */
-
+        
     }
 
     /* MIDDLE CONTAINER */
@@ -23,6 +27,7 @@ $contents=implode(" | " ,$content);
         background-color: #dc3545;
         color: #fff0ef;
         font-weight: bold;
+        margin-top: 0px;
     }
 
     /* INNER CONTAINER */

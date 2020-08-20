@@ -29,12 +29,12 @@ function ps_redirect_after_logout(){
 }
 
 //tinker
-function wpdocs_tinker_menu_page() {
+function wpdocs_commercial_line_menu_page() {
     add_menu_page(
-        'Tinker',
-        'Tinker',
+        'Commercial Line',
+        'Commercial Line',
         'manage_options',
-        'tinker',
+        'commercial-line',
         'custom_menu_callback'
     );
     function custom_menu_callback(){
@@ -42,18 +42,18 @@ function wpdocs_tinker_menu_page() {
     }
 
 }
-add_action( 'admin_menu', 'wpdocs_tinker_menu_page' );
+add_action( 'admin_menu', 'wpdocs_commercial_line_menu_page' );
 
 
 //require_once "tinker.php";
 //using tinker widget as a shortcode
-function wpb_tinker_shortcode() {
-    require_once "tinker.php";
-}
- //register shortcode
-add_shortcode('tinker', 'wpb_tinker_shortcode');
+//function wpb_tinker_shortcode() {
+//    require_once "tinker.php";
+//}
+// //register shortcode
+//add_shortcode('tinker', 'wpb_tinker_shortcode');
 
-?>
+//?>
 <!--    <div class="right-header-wrap">-->
 <!--        --><?php //echo do_shortcode( '[tinker]' ); ?>
 <!--    </div>-->
@@ -73,17 +73,15 @@ function logout_without_confirm($action, $result)
         die;
     }
 }
-//    add_action('wp_ajax_poll_ajax_request', 'poll_ajax_request');
-//
-//    function poll_ajax_request()
-//    {
-//        global $wpdb; // this is how you get access to the database
-//
-//        $quest = intval( $_POST['quest'] );
-//
-////        $whatever += 10;
-//
-//        echo $quest;
-//
-//        wp_die(); // this is
-//    }
+add_action('wp_ajax_line_ajax_request', 'line_ajax_request');
+function line_ajax_request(){
+        global $wpdb;
+        $news=$wpdb->get_results("SELECT * FROM wp_commercial_line ",ARRAY_A);
+        $inputs = '';
+        foreach($news as $n) {
+            $inputs .= "<p class='".$n['id']."'></p><div class='d-inline-flex ".$n['id']."'><input class='mb-3 changed-answer ' style='border-radius: 0; border-right: none' type='text' id='".$n['id']."' name='".$n['content']."' value='".$n['content']."' /><button id='".$n['id']."' type='button' style='border-radius:0; border-left:0' class='btn btn-outline-secondary h-25 p-1 ans-delete ".$n['id']." '>✘</button></div>";
+        }
+        $div = "<div class='container col-6 modal-show'>".$inputs."</div>";
+        echo $div;
+        wp_die();
+}

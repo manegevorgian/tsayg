@@ -5,22 +5,22 @@
             <form action="" method="post" id="poll-form" class="<?php  if($k==count($results)) echo "active";?>">
                 <div class="panel-heading  rounded mb-0 p-2 bg-danger">
                     <h5 class="panel-title text-center text-white m-0">
-                      <?php echo $question ?>
+                        <?php echo $question ?>
                     </h5>
                 </div>
                 <div class="panel-body mt-0">
                     <ul class="list-group ">
-                      <?php foreach ($answers as $answer) { ?>
-                          <li class="list-group-item p-1">
-                              <div class="radio">
-                                  <label style="word-break: break-all">
-                                      <input type="radio" name="answer" class="mr-2 " value="<?php echo $answer["id"] ?>">
-                                    <?= $answer["answer"] ?>
-                                  </label>
-                              </div>
-                          </li>
-                      <?php } ?>
-                      
+                        <?php foreach ($answers as $answer) { ?>
+                            <li class="list-group-item p-1">
+                                <div class="radio">
+                                    <label style="word-break: break-all">
+                                        <input type="radio" name="answer" class="mr-2 " value="<?php echo $answer["id"] ?>">
+                                        <?= $answer["answer"] ?>
+                                    </label>
+                                </div>
+                            </li>
+                        <?php } ?>
+
                     </ul>
                 </div>
                 <div class="panel-footer d-flex justify-content-end">
@@ -61,32 +61,34 @@
 </style>
 <script>
     window.addEventListener('load',function () {
-       const form = jQuery("#poll-form");
-       const result = jQuery("#result-div");
-       if(form.hasClass('active')) {
-           form.on("submit", function (event) {
-               event.preventDefault();
-               jQuery.ajax({
-                   url: '',
-                   method: 'post',
-                   data: form.serialize(),
-                   success: res => {
-                       form.css('display', 'none');
-                       result.css('display', 'block');
-                       result.addClass("active");
-                       form.removeClass("active");
-                   },
-                   error: err => {
-                       console.log("it isn't working");
-                   }
-               })
-           });
-       }
-       else {
-           form.css('display', 'none');
-           result.css('display', 'block');
-           result.addClass("active");
-           form.removeClass("active");
-       }
+        const form = jQuery("#poll-form");
+        const result = jQuery("#result-div");
+        if(form.hasClass('active')) {
+            form.on("submit", function (event) {
+                event.preventDefault();
+                jQuery.ajax({
+                    url: '',
+                    method: 'post',
+                    data: form.serialize(),
+                    success: res => {
+                        location.reload();
+                        form.css('display', 'none');
+                        result.css('display', 'block');
+                        result.addClass("active");
+                        form.removeClass("active");
+
+                    },
+                    error: err => {
+                        console.log("it isn't working");
+                    }
+                })
+            });
+        }
+        else {
+            form.css('display', 'none');
+            result.css('display', 'block');
+            result.addClass("active");
+            form.removeClass("active");
+        }
     })
 </script>
