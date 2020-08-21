@@ -15,10 +15,20 @@ function registerPlugin(){
     register_activation_hook(__FILE__,'pollPluginCallback');
 
 }
+function deregisterPlugin(){
+    register_deactivation_hook( __FILE__, 'pollPluginSecondCallback' );
+}
+
 function pollPluginCallback()
 {
     ?>
     <script>alert('plugin activated')</script>
+<?php
+}
+function pollPluginSecondCallback()
+{
+    ?>
+    <script>alert('plugin deactivated')</script>
 <?php
 }
 function tco_poll_menu_page() {

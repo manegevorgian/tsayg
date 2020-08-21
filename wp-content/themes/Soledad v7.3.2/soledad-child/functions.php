@@ -47,11 +47,11 @@ add_action( 'admin_menu', 'wpdocs_commercial_line_menu_page' );
 
 //require_once "tinker.php";
 //using tinker widget as a shortcode
-//function wpb_tinker_shortcode() {
-//    require_once "tinker.php";
-//}
-// //register shortcode
-//add_shortcode('tinker', 'wpb_tinker_shortcode');
+function wpb_youtube_shortcode() {
+    require_once "youtube.php";
+}
+ //register shortcode
+add_shortcode('youtube', 'wpb_youtube_shortcode');
 
 //?>
 <!--    <div class="right-header-wrap">-->
@@ -85,3 +85,30 @@ function line_ajax_request(){
         echo $div;
         wp_die();
 }
+add_action('wp_ajax_save_ticker_changes_ajax_request', 'save_ticker_changes_ajax_request');
+function save_ticker_changes_ajax_request(){
+    global $wpdb;
+        $changed_a=[];
+        $a_id=[];
+        $changed_a=$_POST["changed_a"];
+        $a_id=$_POST["a_id"];
+        for($a=0;$a<count($changed_a); $a++ ){
+            if($changed_a[$a]!='') $update_a = $wpdb->query("UPDATE wp_commercial_line SET `content`='$changed_a[$a]' WHERE `id`='$a_id[$a]'");
+        }
+        echo 'question has been successfully updated';
+        wp_die();
+}
+    
+    add_action('wp_ajax_ticker_ajax_delete_news', 'ticker_ajax_delete_news');
+    function ticker_ajax_delete_news(){
+        global $wpdb;
+        $ans_id = intval( $_POST['ans_id'] );
+        $delete_a=$wpdb->get_row("DELETE FROM `wp_commercial_line` WHERE `id`='$ans_id'",ARRAY_A);
+        echo 'congrats';
+        wp_die();
+    }
+
+function com_line(){
+    require_once "tinker.php";
+}
+add_action(wp_head,com_line);

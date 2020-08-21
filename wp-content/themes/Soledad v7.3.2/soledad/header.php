@@ -27,9 +27,6 @@
 
 <body <?php body_class(); ?>>
 <?php
-    require_once(realpath($_SERVER["DOCUMENT_ROOT"]).'\wp-content\themes\Soledad v7.3.2\soledad-child\tinker.php') ?>
-
-<?php
 if( get_theme_mod( 'penci_custom_code_after_body_tag' ) ):
 	echo do_shortcode( get_theme_mod( 'penci_custom_code_after_body_tag' ) );
 endif;
@@ -94,9 +91,8 @@ if( ! $penci_hide_header ){
 
 	get_template_part( 'template-parts/header/' . $header_layout );
 	echo '</div>';
-
+ 
 	get_template_part( 'template-parts/header/mailchimp-below-header' );
-
 	if( is_home() || get_theme_mod( 'penci_featured_slider_all_page' ) ) {
 		get_template_part( 'template-parts/header/feature-slider' );
 	}
@@ -108,3 +104,4 @@ if( ! $penci_hide_header ){
 if ( $show_page_title && !is_home() && !is_front_page() ) {
 	get_template_part( 'template-parts/page-header' );
 }
+ ?>

@@ -11,6 +11,9 @@
         <div class="flex-row">
             <form class="form-group " action="" method="post">
                 <h1 class=" text-info text-center m-5">Commercial Line</h1>
+                <div class="form-group">
+                    <button type="button" class=" btn btn-info btn-group-lg mr-0 show " data-quest="" data-toggle="modal" data-target="#exampleModal">Show </button>
+                </div>
                 <div id="form-inputs" class="w-300"></div>
                 <div class="form-group">
                     <button type="button" id="addNews" class="btn btn-secondary btn-group-lg">+Add New</button>
@@ -18,9 +21,7 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-group-lg">Submit</button>
                 </div>
-                <div class="form-group">
-                    <button type="button" class=" btn btn-info btn-group-lg mr-0 show " data-quest="" data-toggle="modal" data-target="#exampleModal">Show </button>
-                </div>
+              
             </form>
         </div>
         <div class="col-6">
@@ -87,11 +88,9 @@
                 url: ajaxurl,
                 method: 'post',
                 data: {
-                    'action': 'save_changes_ajax_request',
+                    'action': 'save_ticker_changes_ajax_request',
                     'changed_a': changed_a,
-                    'changed_q': changed_q,
-                    'a_id': a_id,
-                    'q_id': q_id
+                    'a_id': a_id
                 },
                 success: res => {
                     console.log(res)
@@ -101,23 +100,24 @@
                 }
             })
         })
-        // $(".modal").on("click", ".ans-delete", function (event) {
-        //     let btn_id = $(".ans-delete").attr("id");
-        //     $.ajax({
-        //         url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
-        //         method: 'post',
-        //         data: {
-        //             'action': 'poll_ajax_delete_answer', // This is our PHP function below
-        //             'ans_id': btn_id// This is the variable we are sending via AJAX
-        //         },
-        //         success: res => {
-        //             $("." + btn_id).remove();
-        //         },
-        //         error: err => {
-        //             console.log("it isn't working");
-        //         }
-        //     })
-        // })
+        $(".modal").on("click", ".ans-delete", function (event) {
+            let btn_id = $(".ans-delete").attr("id");
+            console.log(btn_id);
+            $.ajax({
+                url: ajaxurl, // Since WP 2.8 ajaxurl is always defined and points to admin-ajax.php
+                method: 'post',
+                data: {
+                    'action': 'ticker_ajax_delete_news', // This is our PHP function below
+                    'ans_id': btn_id// This is the variable we are sending via AJAX
+                },
+                success: res => {
+                    $("." + btn_id).remove();
+                },
+                error: err => {
+                    console.log("it isn't working");
+                }
+            })
+        })
     })
 </script>
 
@@ -135,7 +135,6 @@
 </style>
 
 <?php
-//insert input
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 $tableName = "wp_commercial_line";
 $dbPrefix = DB_NAME;

@@ -1,23 +1,18 @@
 <?php
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    
-    $content_array = $wpdb->get_results('SELECT `id`,`content` FROM `wp_commercial_line`', ARRAY_A);
-//$content=$tinker[0]['content'];
-//$contents=implode(" | " ,$content);
-    $content=[];
-    foreach ($content_array as $content_r){
-        
-        array_push($content,$content_r["content"]);
-    }
-    $contents=implode(" | " ,$content);
+
+$content_array = $wpdb->get_results('SELECT `id`,`content` FROM `wp_commercial_line`', ARRAY_A);
+$content=[];
+foreach ($content_array as $content_r){
+ array_push($content,$content_r["content"]);
+}
+$contents=implode(" | " ,$content);
 ?>
 <style>
     .tcontainer {
         width: 100%;
-        overflow: hidden; /* Hide scroll bar */
-        
+        overflow: hidden;
     }
-
     /* MIDDLE CONTAINER */
     .ticker-wrap {
         width: 100%;
@@ -27,9 +22,7 @@ require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         background-color: #dc3545;
         color: #fff0ef;
         font-weight: bold;
-        margin-top: 0px;
     }
-
     /* INNER CONTAINER */
     @keyframes ticker {
         0% { transform: translate3d(0, 0, 0); }
@@ -43,13 +36,12 @@ require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         animation-iteration-count: infinite;
         animation-timing-function: linear;
         animation-name: ticker;
-        animation-duration: 10s;
+        animation-duration: 20s;
     }
     .ticker-move:hover{
         animation-play-state: paused; /* Pause scroll on mouse hover */
     }
-
-    /* ITEMS */
+ /* ITEMS */
     .ticker-item{
         display: inline-block; /* Lay items in a horizontal line */
         padding: 0 2rem;
