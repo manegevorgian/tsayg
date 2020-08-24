@@ -111,4 +111,9 @@ function save_ticker_changes_ajax_request(){
 function com_line(){
     require_once "tinker.php";
 }
+//function admin_bar(){
+//    show_admin_bar( true );
+//}
+//
+//add_action(wp_head,admin_bar);
 add_action(wp_head,com_line);
